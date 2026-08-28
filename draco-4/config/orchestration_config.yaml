@@ -1,0 +1,80 @@
+# DRACO-4 Orchestration Configuration
+# Zero-waste, production-ready setup
+
+orchestrator:
+  name: "DRACO-4"
+  version: "1.0.0"
+  mode: "production"
+  
+logging:
+  level: "INFO"
+  format: "json"
+  file: "/var/log/draco4/orchestrator.log"
+  
+agents:
+  leader:
+    id: "draco_leader"
+    role: "orchestrator"
+    pattern: "lstm"
+    memory_budget_mb: 512
+    max_tasks_per_minute: 1000
+    
+  pillars:
+    - id: "pillar_north"
+      role: "processor"
+      pattern: "feed_forward"
+      memory_budget_mb: 256
+      
+    - id: "pillar_east"
+      role: "refiner"
+      pattern: "recurrent"
+      memory_budget_mb: 256
+      
+    - id: "pillar_west"
+      role: "compressor"
+      pattern: "autoencoder"
+      memory_budget_mb: 256
+
+communication:
+  protocol: "async_queue"
+  message_timeout_sec: 30
+  retry_policy: "exponential_backoff"
+  max_retries: 3
+  
+mini_stacks:
+  app_1:
+    name: "Perceptron Decision Engine"
+    geometry: "monad"
+    hosted_by: "pillar_north"
+    
+  app_2:
+    name: "Comparative Analyzer"
+    geometry: "dyad"
+    hosted_by: "pillar_north"
+    
+  app_3:
+    name: "Triangle Validator"
+    geometry: "triad"
+    hosted_by: "pillar_east"
+    
+  app_4:
+    name: "DRACO-4 Hub"
+    geometry: "tetrad"
+    hosted_by: "draco_leader"
+    
+  app_5:
+    name: "Pentagon Expander"
+    geometry: "pentad"
+    hosted_by: "pillar_west"
+
+resource_limits:
+  cpu_percent_max: 80
+  memory_mb_max: 1280  # 4 agents × 320 MB
+  network_bandwidth_mbps: 100
+  storage_gb: 10
+  
+monitoring:
+  enabled: true
+  metrics_interval_sec: 60
+  health_check_interval_sec: 30
+  alert_on_error_rate_above: 0.01  # 1%
