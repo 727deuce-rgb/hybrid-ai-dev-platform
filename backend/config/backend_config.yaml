@@ -1,0 +1,32 @@
+# Backend Configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+  log_level: "info"
+
+orchestrator:
+  initialization_timeout_sec: 30
+  max_concurrent_tasks: 1000
+  task_timeout_sec: 300
+
+database:
+  type: "sqlite"  # production: postgresql
+  path: "./draco4.db"
+  echo: false
+
+logging:
+  level: "INFO"
+  format: "json"
+  file: "/var/log/draco4/backend.log"
+
+cors:
+  allow_origins: ["*"]
+  allow_methods: ["*"]
+  allow_headers: ["*"]
+
+monitoring:
+  enabled: true
+  metrics_port: 9090
+  health_check_interval_sec: 30
